@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: pv-nfsdemo
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes: 
+    - ReadWriteMany
+  nfs:
+    server: 192.168.56.100
+    path: "/srv/nfs/kubedata"

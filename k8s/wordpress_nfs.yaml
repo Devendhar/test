@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deploy
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      volumes:
+      - name: host-volume
+        persistentVolumeClaim:
+          claimName: pvc-nfsdemo
+      containers:
+      - image: wordpress
+        name: wordpress
+        ports:
+        - containerPort: 80
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: "127.0.0.1"
+        - name: WORDPRESS_DB_USER
+          value: demo
+        - name: WORDPRESS_DB_PASSWORD
+          value: "redhat"
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+
+      - image: mysql:5.7
+        name: db
+        env: 
+        - name: MYSQL_DATABASE
+          value: wordpress
+        - name: MYSQL_USER
+          value: demo
+        - name: MYSQL_PASSWORD
+          value: "redhat"
+        - name: MYSQL_RANDOM_ROOT_PASSWORD
+          value: '1'
+        volumeMounts:
+        - name: host-volume
+          mountPath: /var/lib/mysql
