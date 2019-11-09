@@ -4,9 +4,11 @@ metadata:
   name: wordpress-mysql
   labels:
     app: wordpress
+    tier: mysql
 spec:
   ports:
     - port: 3306
   selector:
     app: wordpress
     tier: mysql
+  clusterIP: None
