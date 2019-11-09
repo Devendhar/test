@@ -23,13 +23,25 @@ spec:
           - "--default-authentication-plugin=mysql_native_password"
         env:
           - name: "MYSQL_USER"
-            value: "mysql"
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: username
           - name: "MYSQL_PASSWORD"
-            value: "mysql"
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: password
           - name: "MYSQL_DATABASE"
-            value: "sample"
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: username
           - name: "MYSQL_ROOT_PASSWORD"
-            value: "redhat"
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: password
         ports:
           - containerPort: 3306
             name: mysql
