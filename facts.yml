@@ -1,0 +1,34 @@
+---
+- hosts: all
+  gather_facts: no
+  become: true
+  become_method: dzdo
+  become_user: root
+  tasks:
+  - name: Gathering basic facts
+    shell: "{{item}}"
+    with_items:
+      - uname -a  >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - cat /etc/redhat-release >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - /sbin/ip a >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - df -Th >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - /sbin/route -n >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - uptime >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - free -g >> /var/tmp/TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - grep -i -E  "model name|cpu cores" /proc/cpuinfo  | head -2 >> /var/tmp/                                                                                                                                                             TMOUS-35550_postcheck.txt
+      - echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      - /sbin/multipath -ll >> /var/tmp/TMOUS-35550_postcheck.txt
+      #- echo "" >> /var/tmp/TMOUS-35550_postcheck.txt
+      #- powermt display dev=all >> /var/tmp/TMOUS-35550_postcheck.txt
+
+  - name: permissions
+    file:
+      path: /var/tmp/TMOUS-35550_postcheck.txt
+      mode: 0664
