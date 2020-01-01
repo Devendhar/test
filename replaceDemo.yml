@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - name: disable selinux using replace module
+    replace:
+      path: /etc/selinux/config
+      regexp: '(?i)selinux=enforcing'
+      replace: "SELINUX=disabled"
