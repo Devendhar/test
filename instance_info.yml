@@ -1,0 +1,29 @@
+---
+- hosts: all
+  connection: local
+
+  tasks:
+  - name: instances info
+    ec2_instance_info:
+      #instance_ids:
+        #- i-0600a10affdd96266
+      filters:
+        availability-zone: [ "ap-south-1a", "ap-south-1b", "ap-south-1c" ]
+    register: ec2
+  #- debug: var=ec2
+
+  - debug:
+      #var: instanceInfo.instances[0].iam_instance_profile.arn
+      #msg: Instane Name {{ item.tags.Name }} has Instance Profile {{ item.iam_instance_profile.arn }}
+      msg: "{{ item.tags.Name }} {{ item.instance_id }}"
+    with_items:  "{{ ec2.instances }}"
+    when:
+      - item.iam_instance_profile is undefined
+
+  - name: attaching role to instances
+    ec2_instance:
+      instance_ids: "{{ item.instance_id }}"
+      instance_role: "DemoS3role"
+    with_items: "{{ ec2.instances }}"
+    when:
+      - item.iam_instance_profile is undefined
