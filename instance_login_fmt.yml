@@ -1,5 +1,6 @@
 ---
 #ansible-playbook instances_info.yml | grep -i msg
+#ansible-playbook instance_login_fmt.yml | grep -i   msg | awk -F":" '{print $2}' | awk -F"\"" '{print $2}' > /root/inventory
 - hosts: localhost
   connection: local
   vars:
