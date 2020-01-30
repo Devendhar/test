@@ -1,0 +1,2 @@
+zclient1 ansible_host=192.168.56.31 ansible_user=test1 ansible_ssh_pass=redhat1 ansible_become_password=redhat1
+zclient2 ansible_host=192.168.56.32 ansible_user=test2 ansible_ssh_pass=redhat2 ansible_become_password=redhat2

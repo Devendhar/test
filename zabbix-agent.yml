@@ -1,0 +1,31 @@
+---
+#ansible-playbook -i zabbix-agent-inventory demo.yml --ssh-common-args='-o StrictHostKeyChecking=no'
+- hosts: all
+  gather_facts: yes
+  become: true
+  become_method: sudo
+  become_user: root
+
+  tasks: 
+  - name: copy script to remote machine
+    copy:
+      src: /root/zabbix_agent.sh
+      dest: /tmp
+      mode: '755'
+   
+  - name: Gather package facts
+    package_facts:
+      manager: auto
+
+  - name: Execute script if zabbix-agent is not installed
+    shell: bash -c /tmp/zabbix_agent.sh
+    when: "'zabbix-agent' not in ansible_facts.packages"
+
+  - name: Gather package facts
+    package_facts:
+      manager: auto
+
+  - name: Zabbix Agent 
+    debug:
+      msg: "{{ ansible_hostname }} -> {{ ansible_facts.packages['zabbix-agent'][0].name }} {{ ansible_facts.packages['zabbix-agent'][0].version }}"
+    when: "'zabbix-agent' in ansible_facts.packages"
