@@ -28,4 +28,5 @@
   - name: Zabbix Agent 
     debug:
       msg: "{{ ansible_hostname }} -> {{ ansible_facts.packages['zabbix-agent'][0].name }} {{ ansible_facts.packages['zabbix-agent'][0].version }}"
+      msg: "{{ ansible_facts.packages['zabbix-agent']|map(attribute='version')|list }}"
     when: "'zabbix-agent' in ansible_facts.packages"
