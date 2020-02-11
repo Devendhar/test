@@ -1,0 +1,11 @@
+---
+- name: set hostname
+  shell: >
+    hostnamectl set-hostname {{ envs[env].hostname }}.{{ envs[env].domain }}
+    #hostnamectl set-hostname `hostname -s`.{{ envs[env].domain }} - original
+
+- name: get hostname
+  shell: >
+    hostname --long
+  register: hostname
+

@@ -1,0 +1,33 @@
+---
+- name: Adding Kubernetes Repo
+  template:
+    src: files/kubernetes.repo.j2
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Installing k8s packages
+  yum:
+    name: ['kubelet', 'kubeadm', 'kubectl', 'tc']
+    state: latest
+    disable_excludes: kubernets
+
+- name: update sysctl.conf ip6tables
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: '1'
+    state: present
+
+- name: update sysctl.conf iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    state: present
+
+- name: Start kubelet service
+  service:
+    name: kubelet
+    state: started
+    enabled: true
+

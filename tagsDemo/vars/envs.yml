@@ -1,0 +1,21 @@
+---
+envs: 
+
+  global:
+    domain: example.com
+
+  k8s:
+    hostname: k8s
+    domain: example.com
+   
+  worker1:
+    hostname: worker1
+    domain: example.com
+
+  worker2:
+    hostname: worker2
+    domain: example.com
+
+  zabbix:
+    hostname: zabbix
+    domain: example.com

@@ -1,0 +1,33 @@
+---
+- name: Install Yum config manager package
+  yum:
+    name: yum-utils
+    state: present
+
+- name: Adding Docker repository
+  shell: yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+- name: Installing latest version of docker package
+  yum:
+    name: "{{ packages }}"
+    install_weak_deps: yes
+  vars:
+    packages:
+    - docker-ce-3:18.09.1-3.el7
+    - docker-ce-cli
+    - containerd.io
+  notify:
+    - restart docker
+
+- name: Gather package facts
+  package_facts:
+    manager: auto
+
+- name: start docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
+  when: '"docker-ce" in ansible_facts.packages'

@@ -1,0 +1,37 @@
+---
+- hosts: all
+  gather_facts: no
+  become: true
+  become_user: root
+  vars_files:
+    - 'vars/envs.yml'
+  vars_prompt:
+    - name: 'env'
+      prompt: 'Enter environment IP [k8s|zabbix|"worker1"|"worker2"]'
+      private: no
+  tasks:
+
+    - include: tasks/hostname.yml
+      tags: hostname
+
+    - include: tasks/selinux.yml
+      tags: selinux
+
+    - include: tasks/firewall.yml
+      tags: firewall
+
+    - include: tasks/docker.yml
+      tags: docker
+
+    - include: tasks/kubernetes.yml
+      tags: k8s
+      #https://github.com/kairen/kubeadm-ansible
+
+    - include: tasks/zabbix.yml
+      tags: zabbix
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
